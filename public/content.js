@@ -14,72 +14,46 @@ container.innerHTML = '<div className="flex items-center gap-[20px]"><div classN
 // Append the container to the document's body
 document.body.appendChild(container);
 
-// Define your screen capture options and logic here (if needed)
-// For example:
-// const gdmOptions = {
-//     video: {
-//       displaySurface: "window",
-//     },
-//     audio: {
-//       echoCancellation: true,
-//       noiseSuppression: true,
-//       sampleRate: 44100,
-//       suppressLocalAudioPlayback: true,
-//     },
-//     surfaceSwitching: "include",
-//     selfBrowserSurface: "exclude",
-//     systemAudio: "exclude",
-// };
-
-let mediaRecorder;
-let recordedChunks = [];
+let desktopMediaRequestId;
 
 // Function to start capturing
-async function startCapture(displayMediaOptions) {
-  try {
-    const stream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
-
-    mediaRecorder = new MediaRecorder(stream);
-
-    mediaRecorder.ondataavailable = (event) => {
-      if (event.data.size > 0) {
-        recordedChunks.push(event.data);
+function startCapture(displayMediaOptions) {
+  desktopMediaRequestId = chrome.desktopCapture.chooseDesktopMedia(
+    ['screen', 'window'],
+    (streamId) => {
+      if (streamId) {
+        navigator.mediaDevices
+          .getUserMedia({ audio: false, video: { mandatory: { chromeMediaSource: 'desktop', chromeMediaSourceId: streamId } } })
+          .then((stream) => {
+            // Use the stream for recording
+            // Handle your recording logic here
+            console.log('Screen capture started:', stream);
+          })
+          .catch((err) => {
+            console.error('Error starting screen capture:', err);
+          });
+      } else {
+        console.error('Error selecting desktop media');
       }
-    };
-
-    mediaRecorder.onstop = () => {
-      const blob = new Blob(recordedChunks, { type: 'video/webm' });
-      const url = URL.createObjectURL(blob);
-      chrome.storage.local.set({ videoUrl: url });
-      recordedChunks = [];
-    };
-
-    mediaRecorder.start();
-  } catch (err) {
-    console.error(`Error: ${err}`);
-  }
+    }
+  );
 }
 
-document.getElementById('start').addEventListener('click', () => {
-  chrome.runtime.sendMessage({ type: 'startRecording' });
-});
-
-document.getElementById('pause').addEventListener('click', () => {
-  if (mediaRecorder && mediaRecorder.state === 'recording') {
-    mediaRecorder.pause();
+// Function to stop capturing
+function stopCapture() {
+  if (desktopMediaRequestId) {
+    chrome.desktopCapture.cancelChooseDesktopMedia(desktopMediaRequestId);
+    desktopMediaRequestId = null;
   }
-});
-
-document.getElementById('stop').addEventListener('click', () => {
-  if (mediaRecorder && (mediaRecorder.state === 'recording' || mediaRecorder.state === 'paused')) {
-    mediaRecorder.stop();
-  }
-});
+}
 
 // Listen for messages from the extension popup
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'startRecording') {
     console.log("Hello");
     startCapture();
+  } else if (message.type === 'stopRecording') {
+    console.log("Stop recording");
+    stopCapture();
   }
 });

@@ -13,6 +13,11 @@ const Extension = () => {
         chrome.runtime.sendMessage({ type: 'startRecording' });
     };
 
+  // Function to stop recording
+  const stopRecording = () => {
+      chrome.runtime.sendMessage({ type: 'stopRecording' });
+  };
+
     return (
         <div className='extension'>
             <NavBar />
@@ -24,6 +29,7 @@ const Extension = () => {
             <button className='w-full p-[15px] rounded-lg flex justify-center items-center border text-center text-white font-extrabold text-lg bg-[#120B48]' onClick={startRecording} type='startRecording'>
                 Start Recording
             </button>
+            <button onClick={stopRecording}>Stop Recording</button>
         </div>
     );
 }
