@@ -1,0 +1,16 @@
+.extension{
+    min-width: 400px;
+    padding: 20px;
+    border-radius: 10px;
+    color:  #413C6D;
+    display: grid;
+    gap: 30px;
+}
+.extension p{
+    font-size: 18px;
+    text-align: center;
+    font-weight: 400;
+}
+.myBorder{
+    border: 1px solid ry-400 #413C6D !important;
+}
