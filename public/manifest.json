@@ -3,29 +3,29 @@
     "version": "1.0",
     "name": "Help Me Out",
     "action": {
-        "default_popup": "index.html"
+      "default_popup": "index.html"
     },
     "permissions": [
-        "scripting",
-        "desktopCapture",
-        "activeTab",
-        "tabs"
+      "scripting",
+      "desktopCapture",
+      "activeTab",
+      "tabs"
     ],
     "host_permissions": [
-        "http://*/*",
-        "https://*/*"
+      "http://*/*",
+      "https://*/*"
     ],
     "icons": {
-        "32": "logo.png"
+      "32": "logo.png"
     },
     "background": {
-        "service_worker": "background.js"
+      "service_worker": "background.js"
     },
     "content_scripts": [
-        {
-            "matches": ["<all_urls>"],
-            "js": ["content.js"],
-            "run_at": "document_start"
-        }
+      {
+        "matches": ["<all_urls>"],
+        "js": ["content.js"],
+        "run_at": "document_start"
+      }
     ]
-}
+}  
