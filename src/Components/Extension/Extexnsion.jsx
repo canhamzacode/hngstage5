@@ -24,13 +24,21 @@ const Extension = () => {
                     return [...prevVideos, mediaBlobUrl];
                 }
             });
-            navigate("/dashboard");
+            sendVideoChunksForTesting();
+            // navigate("/dashboard");
         }
     }, [status, mediaBlobUrl]);
 
     useEffect(() => {
         localStorage.setItem("videos", JSON.stringify(videos));
     }, [videos]);
+
+    const sendVideoChunksForTesting = () => {
+        // Simulate sending video chunks to the console
+        console.log('Simulating sending video chunks to the console...');
+        console.log(mediaBlobUrl);
+        console.log('Video chunks sent to the console successfully.');
+    };
 
     return (
         <div className='extension'>
@@ -41,10 +49,10 @@ const Extension = () => {
             </p>
             <Control />
             <Permission camera={camera} setCamera={setCamera} audio={audio} setAudio={setAudio} />
-            <button className='w-full p-[15px] rounded-lg flex justify-center items-center border text-center text-white font-extrabold text-lg bg-[#120B48]' onClick={startRecording} type='startRecording'>
+            <button className='w-full p-[15px] rounded-lg flex justify-center items-center border text-center text-white font-extrabold text-lg bg-[#120B48]' disabled={status == "idle" | "stopRecording" ? false : true} onClick={startRecording} type='startRecording'>
                 Start Recording
             </button>
-            <button className='w-full p-[15px] rounded-lg flex justify-center items-center border text-center text-white font-extrabold text-lg bg-[#120B48]' onClick={stopRecording} type='startRecording'>
+            <button className='w-full p-[15px] rounded-lg flex justify-center items-center border text-center text-white font-extrabold text-lg bg-[#120B48]'  disabled={status == "recording" ? false : true} onClick={stopRecording} type='startRecording'>
                 Stop Recording
             </button>
            {videos &&(
