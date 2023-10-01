@@ -36,7 +36,12 @@ const Dashboard = () => {
           <div className='grid md:grid-cols-2 grid-cols-1 gap-[25px]'>
             {videos.map((video, index) => (
               <DashboardCard key={index} video={video} />
-            ))}
+              ))}
+              <DashboardCard key={"index"} video={"video"} />
+              <DashboardCard key={"index"} video={"video"} />
+              <DashboardCard key={"index"} video={"video"} />
+              <DashboardCard key={"index"} video={"video"} />
+              <DashboardCard key={"index"} video={"video"} />
           </div>
         </div>
       </div>
