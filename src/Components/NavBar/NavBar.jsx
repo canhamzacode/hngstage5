@@ -1,13 +1,14 @@
 import React from 'react'
 import Logo from "../../assets/Image/logo2.svg"
 import {FaBars} from "react-icons/fa"
+import {Link} from "react-router-dom"
 
 const NavBar = () => {
   return (
     <div className='w-full px-[20px] md:px-[40px] py-[20px] justify-between flex flex-wrap gap-[10px]'>
-      <a href="">
+      <Link to="/">
         <img src={Logo} alt="" />
-      </a>
+      </Link>
       <div className='hidden md:flex items-center gap-[20px]'>
         <a href="" className='text-black text-base font-medium'>Features</a>
         <a href="" className='text-black text-base font-medium'>How It works</a>
